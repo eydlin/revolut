@@ -1,4 +1,4 @@
-package com.eydlin;
+package com.eydlin.revolut.resource;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -6,7 +6,7 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.log4j.Logger;
 
-import com.eydlin.wallet.ApplicationException;
+import com.eydlin.revolut.ApplicationException;
 
 @Provider
 public class ApplicationExceptionMapper implements ExceptionMapper<ApplicationException> {

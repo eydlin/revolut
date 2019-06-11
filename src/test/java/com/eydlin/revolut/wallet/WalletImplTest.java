@@ -1,10 +1,14 @@
-package com.eydlin.wallet;
+package com.eydlin.revolut.wallet;
 
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 
 import org.junit.Test;
+
+import com.eydlin.revolut.ApplicationException;
+import com.eydlin.revolut.wallet.Wallet;
+import com.eydlin.revolut.wallet.WalletImpl;
 
 public class WalletImplTest {
 	

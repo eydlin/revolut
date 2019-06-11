@@ -1,6 +1,9 @@
-package com.eydlin.wallet;
+package com.eydlin.revolut.wallet;
 
 import java.math.BigDecimal;
+
+import com.eydlin.revolut.ApplicationException;
+import com.eydlin.revolut.ErrorType;
 
 public class WalletImpl implements Wallet {
 

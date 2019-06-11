@@ -1,4 +1,4 @@
-package com.eydlin.wallet;
+package com.eydlin.revolut;
 
 import static org.glassfish.grizzly.http.util.HttpStatus.*;
 

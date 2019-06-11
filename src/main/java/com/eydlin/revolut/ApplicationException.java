@@ -1,4 +1,4 @@
-package com.eydlin.wallet;
+package com.eydlin.revolut;
 
 @SuppressWarnings("serial")
 public class ApplicationException extends Exception {

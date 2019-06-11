@@ -1,4 +1,4 @@
-package com.eydlin;
+package com.eydlin.revolut.resource;
 
 import static org.glassfish.grizzly.http.util.HttpStatus.BAD_REQUEST_400;
 import static org.glassfish.grizzly.http.util.HttpStatus.NOT_FOUND_404;
@@ -15,6 +15,8 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.eydlin.revolut.Main;
 
 public class WalletResourceTest {
 

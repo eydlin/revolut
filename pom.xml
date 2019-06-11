@@ -73,7 +73,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.eydlin.Main</mainClass>
+                    <mainClass>com.eydlin.revolut.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>

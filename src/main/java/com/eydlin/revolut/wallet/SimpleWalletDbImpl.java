@@ -1,4 +1,4 @@
-package com.eydlin.wallet;
+package com.eydlin.revolut.wallet;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -6,6 +6,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
+
+import com.eydlin.revolut.ApplicationException;
+import com.eydlin.revolut.ErrorType;
 
 /**
  * Simple wallet storage singleton implementation.

@@ -1,4 +1,4 @@
-package com.eydlin;
+package com.eydlin.revolut.resource;
 
 import java.math.BigDecimal;
 
@@ -10,9 +10,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.eydlin.wallet.ApplicationException;
-import com.eydlin.wallet.SimpleWalletDbImpl;
-import com.eydlin.wallet.WalletDb;
+import com.eydlin.revolut.ApplicationException;
+import com.eydlin.revolut.wallet.SimpleWalletDbImpl;
+import com.eydlin.revolut.wallet.WalletDb;
 
 @Path("wallets")
 public class WalletResource {
