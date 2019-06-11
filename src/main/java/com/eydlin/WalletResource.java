@@ -7,6 +7,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import com.eydlin.wallet.ApplicationException;
 import com.eydlin.wallet.SimpleWalletDbImpl;
@@ -19,6 +21,7 @@ public class WalletResource {
 	
 	@Path("/{walletId}/addAmount/{amount}")
 	@PUT
+	@Produces(MediaType.TEXT_PLAIN)
 	public void addAmount(@PathParam("walletId") Integer walletId,
 			@PathParam("amount") BigDecimal amount) throws ApplicationException {
 		walletDb.addAmount(walletId, amount);		
@@ -26,6 +29,7 @@ public class WalletResource {
 	
 	@Path("/{from}/transfer/{to}/{amount}")
 	@PUT
+	@Produces(MediaType.TEXT_PLAIN)
 	public void transfer(@PathParam("from") Integer from,
 			@PathParam("to") Integer to,
 			@PathParam("amount") BigDecimal amount) throws ApplicationException {
@@ -34,12 +38,14 @@ public class WalletResource {
 	
 	@Path("/create")
 	@POST
+	@Produces(MediaType.TEXT_PLAIN)
 	public Integer createWallet() {
 		return walletDb.createWallet();
 	}
 	
 	@Path("/{walletId}/balance")
 	@GET
+	@Produces(MediaType.TEXT_PLAIN)
 	public BigDecimal getBalance(@PathParam("walletId") Integer walletId) throws ApplicationException {
 		return walletDb.getBalance(walletId);
 	}

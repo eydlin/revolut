@@ -13,6 +13,9 @@ public class WalletImpl implements Wallet {
 
 	@Override
 	synchronized public void addAmount(BigDecimal amount) throws ApplicationException {
+		if (amount.compareTo(BigDecimal.ZERO) == 0) {
+			throw new ApplicationException(ErrorType.ILLEGAL_AMOUNT, "cannot add zero amount");
+		}
 		BigDecimal newBalance = balance.add(amount);
 		if (newBalance.compareTo(BigDecimal.ZERO) == -1) {
 			throw new ApplicationException(ErrorType.BALANCE_INSUFFICIENT, "balance insufficient");

@@ -48,7 +48,7 @@ public enum SimpleWalletDbImpl implements WalletDb {
 		}
 		Wallet wallet = wallets.get(walletId);
 		requireNotNull(wallet, ErrorType.NO_SUCH_WALLET, "wallet with id " + walletId + " not found");
-		log.trace("added " + amount + " to wallet with id" + walletId);
+		log.trace("added " + amount + " to wallet with id " + walletId);
 		wallet.addAmount(amount);
 	}
 
