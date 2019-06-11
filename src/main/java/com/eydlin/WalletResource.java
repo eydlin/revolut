@@ -20,7 +20,7 @@ public class WalletResource {
 	private WalletDb walletDb = SimpleWalletDbImpl.INSTANCE;
 	
 	@Path("/{walletId}/addAmount/{amount}")
-	@PUT
+	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	public void addAmount(@PathParam("walletId") Integer walletId,
 			@PathParam("amount") BigDecimal amount) throws ApplicationException {
@@ -28,7 +28,7 @@ public class WalletResource {
 	}
 	
 	@Path("/{from}/transfer/{to}/{amount}")
-	@PUT
+	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	public void transfer(@PathParam("from") Integer from,
 			@PathParam("to") Integer to,

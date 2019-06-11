@@ -43,13 +43,10 @@ public enum SimpleWalletDbImpl implements WalletDb {
 	public void addAmount(Integer walletId, BigDecimal amount) throws ApplicationException {
 		requireNotNull(walletId, ErrorType.WALLET_NOT_SPECIFIED, "wallet not specified");
 		requireNotNull(amount, ErrorType.AMOUNT_NOT_SPECIFIED, "amount not specified");
-		if (BigDecimal.ZERO.equals(amount)) {
-			throw new ApplicationException(ErrorType.ILLEGAL_AMOUNT, "amount must be non-zero");
-		}
 		Wallet wallet = wallets.get(walletId);
 		requireNotNull(wallet, ErrorType.NO_SUCH_WALLET, "wallet with id " + walletId + " not found");
-		log.trace("added " + amount + " to wallet with id " + walletId);
 		wallet.addAmount(amount);
+		log.trace("added " + amount + " to wallet with id " + walletId);
 	}
 
 	@Override
