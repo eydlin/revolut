@@ -4,27 +4,26 @@ import java.math.BigDecimal;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.eydlin.revolut.ApplicationException;
-import com.eydlin.revolut.wallet.SimpleWalletDbImpl;
-import com.eydlin.revolut.wallet.WalletDb;
+import com.eydlin.revolut.account.AccountDb;
+import com.eydlin.revolut.account.SimpleAccountDbImpl;
 
-@Path("wallets")
-public class WalletResource {
+@Path("accounts")
+public class AcountResource {
 
-	private WalletDb walletDb = SimpleWalletDbImpl.INSTANCE;
+	private AccountDb accountDb = SimpleAccountDbImpl.INSTANCE;
 	
-	@Path("/{walletId}/addAmount/{amount}")
+	@Path("/{accountId}/addAmount/{amount}")
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
-	public void addAmount(@PathParam("walletId") Integer walletId,
+	public void addAmount(@PathParam("accountId") Integer accountId,
 			@PathParam("amount") BigDecimal amount) throws ApplicationException {
-		walletDb.addAmount(walletId, amount);		
+		accountDb.addAmount(accountId, amount);		
 	}
 	
 	@Path("/{from}/transfer/{to}/{amount}")
@@ -33,21 +32,21 @@ public class WalletResource {
 	public void transfer(@PathParam("from") Integer from,
 			@PathParam("to") Integer to,
 			@PathParam("amount") BigDecimal amount) throws ApplicationException {
-		walletDb.transfer(from, to, amount);
+		accountDb.transfer(from, to, amount);
 	}
 	
 	@Path("/create")
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
-	public Integer createWallet() {
-		return walletDb.createWallet();
+	public Integer createAcount() {
+		return accountDb.createAcount();
 	}
 	
-	@Path("/{walletId}/balance")
+	@Path("/{accountId}/balance")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public BigDecimal getBalance(@PathParam("walletId") Integer walletId) throws ApplicationException {
-		return walletDb.getBalance(walletId);
+	public BigDecimal getBalance(@PathParam("accountId") Integer accountId) throws ApplicationException {
+		return accountDb.getBalance(accountId);
 	}
 	
 }

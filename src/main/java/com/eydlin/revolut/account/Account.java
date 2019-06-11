@@ -1,10 +1,10 @@
-package com.eydlin.revolut.wallet;
+package com.eydlin.revolut.account;
 
 import java.math.BigDecimal;
 
 import com.eydlin.revolut.ApplicationException;
 
-public interface Wallet {
+public interface Account {
 	BigDecimal getBalance();
 	void addAmount(BigDecimal amount) throws ApplicationException;
 }

@@ -1,11 +1,11 @@
-package com.eydlin.revolut.wallet;
+package com.eydlin.revolut.account;
 
 import java.math.BigDecimal;
 
 import com.eydlin.revolut.ApplicationException;
 import com.eydlin.revolut.ErrorType;
 
-public class WalletImpl implements Wallet {
+public class AccountImpl implements Account {
 
 	private BigDecimal balance = BigDecimal.ZERO;
 	
