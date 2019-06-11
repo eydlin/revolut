@@ -15,7 +15,7 @@ import com.eydlin.wallet.WalletDb;
 @Path("wallets")
 public class WalletResource {
 
-	private WalletDb walletDb = new SimpleWalletDbImpl();
+	private WalletDb walletDb = SimpleWalletDbImpl.INSTANCE;
 	
 	@Path("/{walletId}/addAmount/{amount}")
 	@PUT

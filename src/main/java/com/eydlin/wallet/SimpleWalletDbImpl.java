@@ -7,8 +7,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
-public class SimpleWalletDbImpl implements WalletDb {
-
+/**
+ * Simple wallet storage singleton implementation.
+ * @author eydlin
+ *
+ */
+public enum SimpleWalletDbImpl implements WalletDb {
+	
+	INSTANCE;
+	
 	private Logger log = Logger.getLogger(this.getClass());
 	
 	private Map<Integer, Wallet> wallets = new ConcurrentHashMap<>();
