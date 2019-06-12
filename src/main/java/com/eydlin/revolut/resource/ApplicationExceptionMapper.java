@@ -16,7 +16,7 @@ public class ApplicationExceptionMapper implements ExceptionMapper<ApplicationEx
 	public Response toResponse(ApplicationException ex) {
 		log.debug(ex.getMessage(), ex);
 		return Response.status(ex.getErrorType().getStatusCode()).
-				entity(ex.getErrorType().getErrorCode() + ": " + ex.getMessage()).
+				entity(ex.getErrorType().getErrorCode()).
 				type("text/plain").build();
 	}
 }

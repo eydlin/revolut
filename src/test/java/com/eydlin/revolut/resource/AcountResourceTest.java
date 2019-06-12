@@ -16,6 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.eydlin.revolut.ErrorType;
 import com.eydlin.revolut.Main;
 
 public class AcountResourceTest {
@@ -53,6 +54,8 @@ public class AcountResourceTest {
         Integer accountId = createResp.readEntity(Integer.class);
         Response balanceResp = target.path("accounts/" + (accountId + 1) + "/balance").request().get();
         assertTrue(balanceResp.getStatus() == NOT_FOUND_404.getStatusCode());
+        Integer errorCode = balanceResp.readEntity(Integer.class);
+        assertTrue(errorCode == ErrorType.NO_SUCH_ACCOUNT.getErrorCode());
     }
     
     @Test
@@ -73,7 +76,9 @@ public class AcountResourceTest {
         Response addBalanceResp = 
         		target.path("accounts/" + accountId + "/addAmount/" + new BigDecimal("0")).request().post(null);
         assertTrue(addBalanceResp.getStatus() == BAD_REQUEST_400.getStatusCode());
-        // check if balance has not been affected
+        Integer errorCode = addBalanceResp.readEntity(Integer.class);
+        assertTrue(errorCode == ErrorType.ILLEGAL_AMOUNT.getErrorCode());
+        // verify that balance has not been affected
         Response balanceResp = target.path("accounts/" + accountId + "/balance").request().get();
         BigDecimal balance = balanceResp.readEntity(BigDecimal.class);
         assertTrue(new BigDecimal("3.50").compareTo(balance) == 0);
@@ -87,7 +92,9 @@ public class AcountResourceTest {
         Response substractResp = 
         		target.path("accounts/" + accountId + "/addAmount/" + new BigDecimal("-100")).request().post(null);
         assertTrue(substractResp.getStatus() == BAD_REQUEST_400.getStatusCode());
-        // check if balance has not been affected
+        Integer errorCode = substractResp.readEntity(Integer.class);
+        assertTrue(errorCode == ErrorType.BALANCE_INSUFFICIENT.getErrorCode());
+        // verify that balance has not been affected
         Response balanceResp = target.path("accounts/" + accountId + "/balance").request().get();
         BigDecimal balance = balanceResp.readEntity(BigDecimal.class);
         assertTrue(new BigDecimal("3.50").compareTo(balance) == 0);
@@ -121,7 +128,9 @@ public class AcountResourceTest {
         Response transferResp = 
         		target.path("accounts/" + from + "/transfer/" + to + "/" + new BigDecimal("55")).request().post(null);
         assertTrue(transferResp.getStatus() == BAD_REQUEST_400.getStatusCode());
-        // check if balances have not been affected
+        Integer errorCode = transferResp.readEntity(Integer.class);
+        assertTrue(errorCode == ErrorType.BALANCE_INSUFFICIENT.getErrorCode());
+        // verify that balances have not been affected
         Response balanceResp = target.path("accounts/" + from + "/balance").request().get();
         BigDecimal balance = balanceResp.readEntity(BigDecimal.class);
         assertTrue(new BigDecimal("30").compareTo(balance) == 0);
@@ -141,7 +150,9 @@ public class AcountResourceTest {
         Response transferResp = 
         		target.path("accounts/" + from + "/transfer/" + to + "/" + new BigDecimal("0")).request().post(null);
         assertTrue(transferResp.getStatus() == BAD_REQUEST_400.getStatusCode());
-        // check if balances have not been affected
+        Integer errorCode = transferResp.readEntity(Integer.class);
+        assertTrue(errorCode == ErrorType.ILLEGAL_AMOUNT.getErrorCode());
+        // verify that balances have not been affected
         Response balanceResp = target.path("accounts/" + from + "/balance").request().get();
         BigDecimal balance = balanceResp.readEntity(BigDecimal.class);
         assertTrue(new BigDecimal("30").compareTo(balance) == 0);
@@ -161,7 +172,9 @@ public class AcountResourceTest {
         Response transferResp = 
         		target.path("accounts/" + from + "/transfer/" + to + "/" + new BigDecimal("-273")).request().post(null);
         assertTrue(transferResp.getStatus() == BAD_REQUEST_400.getStatusCode());
-        // check if balances have not been affected
+        Integer errorCode = transferResp.readEntity(Integer.class);
+        assertTrue(errorCode == ErrorType.ILLEGAL_AMOUNT.getErrorCode());
+        // verify that balances have not been affected
         Response balanceResp = target.path("accounts/" + from + "/balance").request().get();
         BigDecimal balance = balanceResp.readEntity(BigDecimal.class);
         assertTrue(new BigDecimal("30").compareTo(balance) == 0);
@@ -178,10 +191,49 @@ public class AcountResourceTest {
         Response transferResp = 
         		target.path("accounts/" + accountId + "/transfer/" + accountId + "/" + new BigDecimal("10")).request().post(null);
         assertTrue(transferResp.getStatus() == BAD_REQUEST_400.getStatusCode());
-        // check if balance has not been affected
+        Integer errorCode = transferResp.readEntity(Integer.class);
+        assertTrue(errorCode == ErrorType.TO_AND_FROM_ACCOUNTS_MATCH.getErrorCode());
+        // verify that balance has not been affected
         Response balanceResp = target.path("accounts/" + accountId + "/balance").request().get();
         BigDecimal balance = balanceResp.readEntity(BigDecimal.class);
         assertTrue(new BigDecimal("30").compareTo(balance) == 0);
+    }
+    
+    @Test
+    public void transferToNonExistentAccountTest() {
+        Response createFromResp = target.path("accounts/create").request().post(null);
+        Integer from = createFromResp.readEntity(Integer.class);	
+        target.path("accounts/" + from + "/addAmount/" + new BigDecimal("30")).request().post(null);
+        Response createToResp = target.path("accounts/create").request().post(null);
+        Integer to = createToResp.readEntity(Integer.class) + 1;
+        target.path("accounts/" + to + "/addAmount/" + new BigDecimal("20")).request().post(null);	
+        Response transferResp = 
+        		target.path("accounts/" + from + "/transfer/" + to + "/" + new BigDecimal("10")).request().post(null);
+        assertTrue(transferResp.getStatus() == NOT_FOUND_404.getStatusCode());
+        Integer errorCode = transferResp.readEntity(Integer.class);
+        assertTrue(errorCode == ErrorType.NO_SUCH_TO_ACCOUNT.getErrorCode());
+        // verify that source account balance has not been affected
+        Response balanceResp = target.path("accounts/" + from + "/balance").request().get();
+        BigDecimal balance = balanceResp.readEntity(BigDecimal.class);
+        assertTrue(new BigDecimal("30").compareTo(balance) == 0);
+    }
+    
+    @Test
+    public void transferFromNonExistentAccountTest() {
+        Response createToResp = target.path("accounts/create").request().post(null);
+        Integer to = createToResp.readEntity(Integer.class);
+        Response createFromResp = target.path("accounts/create").request().post(null);
+        Integer from = createFromResp.readEntity(Integer.class) + 1;
+        target.path("accounts/" + to + "/addAmount/" + new BigDecimal("20")).request().post(null);	
+        Response transferResp = 
+        		target.path("accounts/" + from + "/transfer/" + to + "/" + new BigDecimal("10")).request().post(null);
+        assertTrue(transferResp.getStatus() == NOT_FOUND_404.getStatusCode());
+        Integer errorCode = transferResp.readEntity(Integer.class);
+        assertTrue(errorCode == ErrorType.NO_SUCH_ACCOUNT.getErrorCode());
+        // verify that receiver account balance has not been affected
+        Response balanceResp = target.path("accounts/" + to + "/balance").request().get();
+        BigDecimal balance = balanceResp.readEntity(BigDecimal.class);
+        assertTrue(new BigDecimal("20").compareTo(balance) == 0);
     }
 
 }
